@@ -1,0 +1,37 @@
+import csv
+from datetime import datetime
+
+class ExpenseTracker:
+    def __init__(self):
+        self.expenses = []
+        self.categories = ["Food", "Transportation", "Entertainment", "Others"]
+
+    def add_expense(self, amount, description, category):
+        date = datetime.now().strftime("%Y-%m-%d")
+        self.expenses.append({"Date": date, "Amount": amount, "Description": description, "Category": category})
+
+    def save_to_csv(self, filename):
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=["Date", "Amount", "Description", "Category"])
+            writer.writeheader()
+            writer.writerows(self.expenses)
+
+    def load_from_csv(self, filename):
+        with open(filename, mode='r') as file:
+            reader = csv.DictReader(file)
+            self.expenses = list(reader)
+
+    def show_expenses(self):
+        for expense in self.expenses:
+            print(expense)
+
+# Example usage:
+tracker = ExpenseTracker()
+tracker.add_expense(20.5, "Lunch", "Food")
+tracker.add_expense(10.75, "Bus fare", "Transportation")
+tracker.add_expense(50, "Movie tickets", "Entertainment")
+
+tracker.save_to_csv("expenses.csv")
+
+tracker.load_from_csv("expenses.csv")
+tracker.show_expenses()
